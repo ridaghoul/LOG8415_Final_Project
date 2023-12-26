@@ -42,9 +42,9 @@ Connect to each slave server as root and:
 
 Finaly, back on the master server: 
 
-run `cd /home/ubuntu/master_setup` 
-run `./mysql_cluster_benchmark.sh`
-run `cat cluster_results.txt` to see the results`
+1. run `cd /home/ubuntu/master_setup` 
+2. run `./mysql_cluster_benchmark.sh`
+3. run `cat cluster_results.txt` to see the results`
 
 # Proxy 
 copy the proxy_setup folder to the proxy server using this command 
