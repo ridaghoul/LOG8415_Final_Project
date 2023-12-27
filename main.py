@@ -1,6 +1,5 @@
 import boto3
 
-standalone_sg_name= 'standalone-sg'
 amazon_machine_image= 'ami-0c7217cdde317cfec'
 pkey= 'vockey'
 default_subnet_id='subnet-035477eb3715efdc3'
@@ -23,7 +22,7 @@ def create_security_group(client, security_group_name, description):
 
 def create_security_group_standalone(client):
     security_group = client.create_security_group(
-        GroupName=standalone_sg_name,
+        GroupName='standalone-sg',
         Description='Standalone server.'
     )
 
@@ -32,7 +31,39 @@ def create_security_group_standalone(client):
         IpProtocol='tcp',
         FromPort=22,
         ToPort=22,
-        GroupName=standalone_sg_name
+        GroupName='standalone-sg'
+    )
+        
+    return security_group
+
+def create_security_group_gatekeeper(client):
+    security_group = client.create_security_group(
+        GroupName='gatekeeper_sg_name',
+        Description='Standalone server.'
+    )
+
+    client.authorize_security_group_ingress(
+        CidrIp='0.0.0.0/0',
+        IpProtocol='tcp',
+        FromPort=22,
+        ToPort=22,
+        GroupName='gatekeeper_sg_name'
+    )
+
+    client.authorize_security_group_ingress(
+        CidrIp='0.0.0.0/0',
+        IpProtocol='tcp',
+        FromPort=80,
+        ToPort=80,
+        GroupName='gatekeeper_sg_name'
+    )
+
+    client.authorize_security_group_ingress(
+        CidrIp='0.0.0.0/0',
+        IpProtocol='tcp',
+        FromPort=443,
+        ToPort=443,
+        GroupName='gatekeeper_sg_name'
     )
         
     return security_group
@@ -97,10 +128,20 @@ def create_proxy_infrastructure(client):
 
     return proxy
 
+
+def create_gatekeeper_infrastructure(client):
+    print('Creating gatekeeper infrastructure!')
+    security_group = create_security_group_gatekeeper(client)
+    gatekeeper = create_instances(client,'t2.large', security_group['GroupId'], '172.31.17.7', 'gatekeeper')
+    print('The gatekeeper infrastructure has been successfully created!')
+
+    return gatekeeper
+
 if __name__ == '__main__':
     ec2_client = boto3.client('ec2')
 
     create_standalone_infrastructure(ec2_client)
     create_cluster_infrastructure(ec2_client)
     create_proxy_infrastructure(ec2_client)
+    create_gatekeeper_infrastructure(ec2_client)
     

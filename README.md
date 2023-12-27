@@ -1,3 +1,5 @@
+For demenstration : https://www.youtube.com/watch?v=Wd_fusG8-GI 
+
 # Prerequisites
 
 1. `git clone https://github.com/ridaghoul/LOG8415_Final_Project.git`
@@ -42,9 +44,9 @@ Connect to each slave server as root and:
 
 Finaly, back on the master server: 
 
-1. run `cd /home/ubuntu/master_setup` 
-2. run `./mysql_cluster_benchmark.sh`
-3. run `cat cluster_results.txt` to see the results`
+run `cd /home/ubuntu/master_setup` 
+run `./mysql_cluster_benchmark.sh`
+run `cat cluster_results.txt` to see the results`
 
 # Proxy 
 copy the proxy_setup folder to the proxy server using this command 
@@ -60,7 +62,15 @@ copy the proxy_setup folder to the proxy server using this command
 2. run `cd /home/ubuntu/proxy_setup` 
 3. run `chmod +x proxy_setup.sh`
 4. run `./proxy_setup.sh`
-5. Run `python3 proxy.py <implementation> <sql_query>` where `<implementation>` is either `direct`, `random` or `customized`.  
+5. Run `python3 proxy.py`.  
 
- 
+# Gatekeeper 
 
+copy the gatekeeper_setup folder to the gatekeeper server using this command 
+`scp -i "vockey.pem" -r gatekeeper_setup ubuntu@"replace with the gatekeepers public IP":/home/ubuntu`
+
+1. connect to the gatekeeper server as root:
+2. run `cd /home/ubuntu/gatekeeper_setup` 
+3. run `chmod +x gatekeeper_setup.sh`
+4. run `./gatekeeper_setup.sh`
+5. Run `python3 gatekeeper.py`. 
